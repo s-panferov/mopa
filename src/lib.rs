@@ -1,3 +1,6 @@
+#![feature(core)]
+
+
 // This is largely taken from the Rust distribution, with only comparatively
 // minor additions and alterations. Therefore, their copyright notice follows:
 //
@@ -287,4 +290,23 @@ macro_rules! mopafy {
             }
         }
     };
+}
+
+#[cfg(test)]
+mod test {
+
+    use std::any::Any;
+    
+    trait Person: Any {}
+    
+    mopafy!(Person);
+    
+    struct Benny;
+    impl Person for Benny {}
+
+    #[test]
+    fn test_is() {
+        let person = Box::new(Benny) as Box<Person>;
+        assert!(person.is::<Benny>());
+    }
 }
